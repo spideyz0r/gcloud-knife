@@ -2,7 +2,7 @@
 %global go_release go1.18.10
 
 Name:           gcloud-knife
-Version:        0.1
+Version:        0.2
 Release:        1%{?dist}
 Summary:        This is a test
 License:        GPLv3

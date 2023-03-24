@@ -1,6 +1,10 @@
 name: rpm-builder
 
-on: [pull_request]
+on:
+  push:
+    # run only against tags
+    tags:
+      - '*'
 
 jobs:
   build:
