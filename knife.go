@@ -41,10 +41,12 @@ func (k Knife) Print() {
 	}
 }
 
-func getUser(host string) string {
-	var user string
-	ssh_config_file := filepath.Join(os.Getenv("HOME"), ".ssh", "config")
+func getUser(host, user string) string {
+	if len(user) > 0 {
+		return user
+	}
 
+	ssh_config_file := filepath.Join(os.Getenv("HOME"), ".ssh", "config")
 	if _, err := os.Stat(ssh_config_file); errors.Is(err, os.ErrNotExist) {
 		return os.Getenv("USER")
 	}
@@ -61,7 +63,7 @@ func getUser(host string) string {
 	return user
 }
 
-func runCommand(host string, command string, user string, wg *sync.WaitGroup) {
+func runCommand(host, command, user, port string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	// use the private key from the ssh-agent
@@ -79,7 +81,7 @@ func runCommand(host string, command string, user string, wg *sync.WaitGroup) {
 		},
 	}
 
-	conn, err := ssh.Dial("tcp", net.JoinHostPort(host, "22"), config)
+	conn, err := ssh.Dial("tcp", net.JoinHostPort(host, port), config)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -98,7 +100,7 @@ func runCommand(host string, command string, user string, wg *sync.WaitGroup) {
 	fmt.Printf("%s: %s\n", host, strings.Replace(string(output), "\n", " ", -1))
 }
 
-func getTarget(f string, p string) ([]Target, error) {
+func getTarget(f, p string) ([]Target, error) {
 	var targets []Target
 	ctx := context.Background()
 	c, err := compute.NewInstancesRESTClient(ctx)
