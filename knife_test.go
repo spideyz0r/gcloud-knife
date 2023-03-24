@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"os"
 	"log"
+	"os"
 	"testing"
 )
 
@@ -58,8 +58,8 @@ func TestGetUser(t *testing.T) {
 		expected string
 	}{
 		{host: "example.com", user: "", expected: os.Getenv("USER")},
-		{host: "myserver", user:"", expected: "myuser"},
-		{host: "myserver", user:"myuser", expected: "myuser"},
+		{host: "myserver", user: "", expected: "myuser"},
+		{host: "myserver", user: "myuser", expected: "myuser"},
 	}
 
 	d, err := ioutil.TempDir("", "myuser")
@@ -69,8 +69,8 @@ func TestGetUser(t *testing.T) {
 	defer os.RemoveAll(d)
 	os.Setenv("HOME", d)
 
-	os.MkdirAll(d + "/.ssh", 0700)
-	ioutil.WriteFile(d +"/.ssh/config", []byte("Host myserver\nUser myuser\n"), 0600)
+	os.MkdirAll(d+"/.ssh", 0700)
+	ioutil.WriteFile(d+"/.ssh/config", []byte("Host myserver\nUser myuser\n"), 0600)
 
 	for _, test := range tests {
 		actual := getUser(test.host, test.user)
@@ -79,4 +79,3 @@ func TestGetUser(t *testing.T) {
 		}
 	}
 }
-
