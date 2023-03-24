@@ -14,7 +14,9 @@ dnf install gcloud-knife
 
 
 ### From source
-`go build -v -o  gcloud-knife`
+```
+go build -v -o  gcloud-knife
+```
 
 ## Usage
 ```
