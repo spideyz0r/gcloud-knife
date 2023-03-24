@@ -12,10 +12,11 @@ import (
 func main() {
 
 	help := getopt.BoolLong("help", 'h', "display this help")
-	filter := getopt.StringLong("filter", 'f', "", "target filter")
-	command := getopt.StringLong("command", 'c', "", "command to be run externally")
-	project := getopt.StringLong("project", 'p', "", "GCP project")
-	user := getopt.StringLong("user", 'u', "", "[user]")
+	filter := getopt.StringLong("filter", 'f', "", "filter")
+	command := getopt.StringLong("command", 'c', "", "command to run, if empty will print the list of hosts")
+	project := getopt.StringLong("project", 'p', "", "project")
+	port := getopt.StringLong("port", 't', "22", "optional port, default: 22")
+	user := getopt.StringLong("user", 'u', "", "optional user, otherwise will read from local configuration")
 
 	getopt.Parse()
 
@@ -50,10 +51,8 @@ func main() {
 	var wg sync.WaitGroup
 	for _, t := range k.targets {
 		wg.Add(1)
-		if len(*user) == 0 {
-			k.user = getUser(t.hostname)
-		}
-		go runCommand(t.hostname, k.command, k.user, &wg)
+		k.user = getUser(t.hostname, *user)
+		go runCommand(t.hostname, k.command, k.user, *port, &wg)
 	}
 	wg.Wait()
 	os.Exit(0)
@@ -68,3 +67,7 @@ func parseArgs(p, c string) (bool, error) {
 	}
 	return false, nil
 }
+
+// TODO
+// use channels
+// add more tests

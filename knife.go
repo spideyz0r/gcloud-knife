@@ -35,16 +35,18 @@ type Target struct {
 }
 
 func (k Knife) Print() {
-	fmt.Printf("%s\t%s\t%s\t%s\t\n", "Hostname", "Name", "Zone", "Machine Type")
+	fmt.Printf("%s\t%s\t%s\t%s\n", "Hostname", "Name", "Zone", "Machine Type")
 	for _, t := range k.targets {
-		fmt.Printf("%s\t%s\t%s\t%s\t\n", t.hostname, t.name, t.zone, t.machine_type)
+		fmt.Printf("%s\t%s\t%s\t%s\n", t.hostname, t.name, t.zone, t.machine_type)
 	}
 }
 
-func getUser(host string) string {
-	var user string
-	ssh_config_file := filepath.Join(os.Getenv("HOME"), ".ssh", "config")
+func getUser(host, user string) string {
+	if len(user) > 0 {
+		return user
+	}
 
+	ssh_config_file := filepath.Join(os.Getenv("HOME"), ".ssh", "config")
 	if _, err := os.Stat(ssh_config_file); errors.Is(err, os.ErrNotExist) {
 		return os.Getenv("USER")
 	}
@@ -61,7 +63,7 @@ func getUser(host string) string {
 	return user
 }
 
-func runCommand(host string, command string, user string, wg *sync.WaitGroup) {
+func runCommand(host, command, user, port string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	// use the private key from the ssh-agent
@@ -79,7 +81,7 @@ func runCommand(host string, command string, user string, wg *sync.WaitGroup) {
 		},
 	}
 
-	conn, err := ssh.Dial("tcp", net.JoinHostPort(host, "22"), config)
+	conn, err := ssh.Dial("tcp", net.JoinHostPort(host, port), config)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -92,13 +94,15 @@ func runCommand(host string, command string, user string, wg *sync.WaitGroup) {
 	defer session.Close()
 
 	output, err := session.Output(command)
+	txt_output := strings.Replace(string(output), "\n", " ", -1)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("%s: %s: Errors: %s\n", host, txt_output, err)
+		return
 	}
-	fmt.Printf("%s: %s\n", host, strings.Replace(string(output), "\n", " ", -1))
+	fmt.Printf("%s: %s\n", host, txt_output)
 }
 
-func getTarget(f string, p string) ([]Target, error) {
+func getTarget(f, p string) ([]Target, error) {
 	var targets []Target
 	ctx := context.Background()
 	c, err := compute.NewInstancesRESTClient(ctx)
