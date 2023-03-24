@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/compute v1.18.0
 	github.com/kevinburke/ssh_config v1.2.0
 	github.com/pborman/getopt v1.1.0
-	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
+	golang.org/x/crypto v0.0.0-20220314234659-1baeb1ce4c0b
 	google.golang.org/api v0.114.0
 )
 
