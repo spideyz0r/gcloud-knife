@@ -15,7 +15,7 @@ func main() {
 	filter := getopt.StringLong("filter", 'f', "", "filter")
 	command := getopt.StringLong("command", 'c', "", "command to run, if empty will print the list of hosts")
 	project := getopt.StringLong("project", 'p', "", "project")
-	port := getopt.StringLong("project", 't', "22", "optional port, default: 22")
+	port := getopt.StringLong("port", 't', "22", "optional port, default: 22")
 	user := getopt.StringLong("user", 'u', "", "optional user, otherwise will read from local configuration")
 
 	getopt.Parse()
