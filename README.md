@@ -1,5 +1,5 @@
 # gcloud-knife [![CI](https://github.com/spideyz0r/gcloud-knife/workflows/gotester/badge.svg)][![CI](https://github.com/spideyz0r/gcloud-knife/workflows/goreleaser/badge.svg)][![CI](https://github.com/spideyz0r/gcloud-knife/workflows/rpm-builder/badge.svg)]
-gcloud-knife is a tool to run commands on multiple GCP instances in concurrently.
+gcloud-knife is a tool to run commands on multiple GCP instances concurrently.
 
 It can also be used to initially list the instances to ensure that the filter is working correctly before executing commands on the VMs.
 
