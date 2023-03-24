@@ -2,7 +2,7 @@
 %global go_release go1.18.10
 
 Name:           gcloud-knife
-Version:        0.2
+Version:        0.3
 Release:        1%{?dist}
 Summary:        This is a test
 License:        GPLv3
@@ -37,5 +37,8 @@ install -Dpm 0755 %{name} %{buildroot}%{_bindir}/%{name}
 %license LICENSE
 
 %changelog
+* Fri Mar 24 2023 spideyz0r <47341410+spideyz0r@users.noreply.github.com> 0.3-1
+- Initial build
+
 * Fri Mar 24 2023 spideyz0r <47341410+spideyz0r@users.noreply.github.com> 0.1-1
 - Initial build
