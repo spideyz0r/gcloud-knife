@@ -70,3 +70,4 @@ func parseArgs(p, c string) (bool, error) {
 
 // TODO
 // use channels
+// add more tests
